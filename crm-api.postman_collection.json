@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Prysm Labs Mini CRM",
+    "description": "API Collection for testing the CRM Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "http://localhost:3000/auth/register", "host": ["http://localhost:3000"], "path": ["auth", "register"]},
+            "body": {"mode": "raw", "raw": "{\"name\": \"Test Admin\", \"email\": \"admin@test.com\", \"password\": \"StrongPass@1\", \"role\": \"ADMIN\"}"}
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "http://localhost:3000/auth/login", "host": ["http://localhost:3000"], "path": ["auth", "login"]},
+            "body": {"mode": "raw", "raw": "{\"email\": \"admin@test.com\", \"password\": \"StrongPass@1\"}"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Users",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "http://localhost:3000/users", "host": ["http://localhost:3000"], "path": ["users"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "url": {"raw": "http://localhost:3000/customers", "host": ["http://localhost:3000"], "path": ["customers"]},
+            "body": {"mode": "raw", "raw": "{\"name\": \"Acme Corp\", \"email\": \"info@acme.com\", \"phone\": \"111-222-3333\"}"}
+          }
+        },
+        {
+          "name": "Get Customers",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "http://localhost:3000/customers?page=1&limit=10", "host": ["http://localhost:3000"], "path": ["customers"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get Tasks",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "http://localhost:3000/tasks", "host": ["http://localhost:3000"], "path": ["tasks"]}
+          }
+        }
+      ]
+    }
+  ]
+}
