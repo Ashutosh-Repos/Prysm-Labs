@@ -1,0 +1,208 @@
+Prysm Labs – Backend Developer Intern Assignment
+Professional Assignment Brief (NestJS / Node.js)
+Prysm Labs – Backend Developer Intern Assignment
+Role: Backend Developer Intern (NestJS / Node.js)
+Mode: Remote
+Deadline : 28-jan-2026 11:59 pm
+1. Objective
+Build a mini backend system using NestJS / NodeJS, PostgreSQL, and Prisma that demonstrates your
+ability to design and implement production-quality REST APIs. The assignment focuses on
+authentication, role-based authorization, database schema design, clean architecture, and API
+documentation/testing.
+2. Mandatory Tech Stack
+You must use the following:
+- NestJS (TypeScript)(prefered) or Node.js
+- PostgreSQL
+- Prisma ORM
+- JWT Authentication
+- Swagger API documentation (@nestjs/swagger)
+- DTO validation (class-validator, class-transformer)
+- Password hashing with bcrypt
+3. Project Title
+Mini CRM Backend (Users, Customers, and Tasks)
+4. Core Functional Modules
+4.1 Authentication Module
+Goal: Implement secure user registration and login with JWT-based authentication.
+Required Roles:
+- ADMIN
+- EMPLOYEE
+Endpoints:
+1) POST /auth/register
+Request body:
+- name (string, required)
+- email (string, required, unique, valid email format)
+- password (string, required, minimum 8 characters)
+- role (enum: ADMIN or EMPLOYEE)
+Rules:
+- Password must be hashed using bcrypt before saving.
+- Email must be unique.
+- Return user metadata (id, name, email, role) on success.
+- Do not return password in any response.
+2) POST /auth/login
+Request body:
+- email (string, required)
+- password (string, required)
+Response:
+- accessToken (JWT)
+- user: { id, name, email, role }
+Rules:
+- If email/password is incorrect, return an appropriate error message (401 Unauthorized).
+- JWT token must include at least: userId and role.
+Authentication Requirement:
+All protected routes must require a valid JWT token sent as:
+Authorization: Bearer
+4.2 Users Module (Admin Only)
+Goal: Allow admins to view and manage user roles.
+Access Control:
+Only ADMIN role can access these endpoints.
+Endpoints:
+1) GET /users
+Returns list of users (id, name, email, role, createdAt)
+2) GET /users/:id
+Returns user by id
+3) PATCH /users/:id
+Updates user role only
+Request body:
+- role (ADMIN or EMPLOYEE)
+Rules:
+- Changing email/password is not part of this assignment.
+- Return 404 if user not found.
+4.3 Customers Module
+Goal: Manage customer records with CRUD APIs and pagination.
+Customer Fields:
+- id (auto)
+- name (required)
+- email (required, unique)
+- phone (required, unique)
+- company (optional)
+- createdAt (auto)
+- updatedAt (auto)
+Access Control:
+- ADMIN: Full access to all customer operations
+- EMPLOYEE: Read-only access
+Endpoints:
+1) POST /customers (ADMIN only)
+Creates a new customer
+2) GET /customers (ADMIN + EMPLOYEE)
+Returns customer list with pagination
+Query parameters:
+- page (default: 1)
+- limit (default: 10)
+Response must include:
+- page
+- limit
+- totalRecords
+- totalPages
+- data: [customers]
+3) GET /customers/:id (ADMIN + EMPLOYEE)
+Returns a single customer by id
+4) PATCH /customers/:id (ADMIN only)
+Updates customer details (name/email/phone/company)
+5) DELETE /customers/:id (ADMIN only)
+Deletes a customer
+Validation and Error Rules:
+- Enforce unique constraints on email and phone.
+- Return 409 Conflict for duplicates (email or phone).
+- Return 404 Not Found for invalid customer id.
+- Validate request body using DTOs.
+4.4 Tasks Module
+Goal: Create tasks linked to customers and assign them to employees.
+Task Fields:
+- id (auto)
+- title (required)
+- description (optional)
+- status (enum: PENDING, IN_PROGRESS, DONE)
+- assignedTo (userId, must be EMPLOYEE)
+- customerId (linked customer)
+- createdAt (auto)
+- updatedAt (auto)
+Access Control and Rules:
+- ADMIN can create tasks and view all tasks.
+- EMPLOYEE can view only their assigned tasks.
+- EMPLOYEE can update status only for their own tasks.
+Endpoints:
+1) POST /tasks (ADMIN only)
+Creates a task
+Request body:
+- title (required)
+- description (optional)
+- assignedTo (required: employee userId)
+- customerId (required)
+- status (optional, default: PENDING)
+Rules:
+- assignedTo must exist and have role EMPLOYEE.
+- customerId must exist.
+- Return 404 if customer or assigned user is not found.
+2) GET /tasks
+Rules:
+- ADMIN: returns all tasks
+- EMPLOYEE: returns only tasks assigned to them
+Response should include:
+- task details
+- assignedTo user metadata (id, name, email)
+- customer metadata (id, name, email, phone)
+3) PATCH /tasks/:id/status
+Updates task status
+Request body:
+- status (PENDING, IN_PROGRESS, DONE)
+Rules:
+- EMPLOYEE can only update tasks assigned to them.
+- ADMIN may update any task (optional but acceptable).
+- Return 403 Forbidden if employee tries to update someone else’s task.
+5. Global Requirements
+1) Clean Architecture
+Use a standard NestJS structure with clear separation of concerns:
+- controllers: HTTP handling
+- services: business logic
+- DTOs: validation and request contracts
+- guards: authentication and role checks
+- prisma: database access layer
+2) Validation and Error Handling
+- Use DTO validation across all endpoints.
+- Use proper HTTP status codes:
+- 400 Bad Request for validation failures
+- 401 Unauthorized for missing/invalid token
+- 403 Forbidden for role violations
+- 404 Not Found for missing records
+- 409 Conflict for duplicates
+3) API Documentation
+- Swagger must document all endpoints, request bodies, and response objects.
+- Swagger must allow testing of protected routes via JWT.
+4) API Testing and Code Quality
+- Provide either a Postman collection or example curl commands.
+- Maintain clean commit history on GitHub with meaningful messages.
+6. Bonus (Optional)
+- Customer search filter:
+GET /customers?search=
+- Unit tests for key endpoints (Jest)
+- Docker support (docker-compose with PostgreSQL)
+- Deployment on Render/Railway
+7. Submission Instructions
+Submit the following:
+1) GitHub repository link (public or accessible)
+2) README.md with:
+- setup instructions
+- environment variables (.env.example)
+- database migration steps (Prisma migrate)
+- how to start the server
+- swagger URL
+3) Postman collection or curl commands
+Submission Guideline
+Submission Email: Assignment_Backend@prysmlabs.in
+Subject: Backend Intern Assignment – (Use this subject strictly)
+Deadline: 28-Jan-2026, 11:59 PM
+Important Submission Policy
+- Only submissions sent to Assignment_Backend@prysmlabs.in will be considered for evaluation.
+- Submissions sent to any other email ID will not be reviewed.
+- The total number of submissions accepted is limited to 100 candidates only.
+- Shortlisting will be done on a First-Come, First-Served (FCFS) basis based on the email timestamp
+received.
+- Once the limit of 100 submissions is reached, further submissions may be ignored even if the deadline
+has not passed.
+8. Evaluation Criteria
+- API functionality and correctness
+- Database schema design and use of Prisma
+- Authentication and role-based authorization correctness
+- Clean code structure and readability
+- Swagger documentation quality
+- Git commit quality and clarity

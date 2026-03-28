@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { CustomersService } from './customers.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -87,6 +88,7 @@ describe('CustomersService', () => {
 
     it('should throw NotFoundException if customer not found', async () => {
       mockPrismaService.customer.findUnique.mockResolvedValue(null);
+
       await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
     });
   });
@@ -95,7 +97,10 @@ describe('CustomersService', () => {
     it('should update a customer if it exists', async () => {
       const updateDto = { name: 'Acme 2' };
       mockPrismaService.customer.findUnique.mockResolvedValue({ id: 1 });
-      mockPrismaService.customer.update.mockResolvedValue({ id: 1, ...updateDto });
+      mockPrismaService.customer.update.mockResolvedValue({
+        id: 1,
+        ...updateDto,
+      });
 
       const result = await service.update(1, updateDto);
 

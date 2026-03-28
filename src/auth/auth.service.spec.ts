@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -11,7 +12,6 @@ jest.mock('bcrypt');
 describe('AuthService', () => {
   let service: AuthService;
   let prisma: PrismaService;
-  let jwt: JwtService;
 
   const mockPrismaService = {
     user: {
@@ -35,7 +35,6 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     prisma = module.get<PrismaService>(PrismaService);
-    jwt = module.get<JwtService>(JwtService);
   });
 
   afterEach(() => {
@@ -103,16 +102,18 @@ describe('AuthService', () => {
     it('should throw UnauthorizedException if user not found', async () => {
       mockPrismaService.user.findUnique.mockResolvedValue(null);
 
-      await expect(service.login({ email: 'x@x.com', password: 'p' }))
-        .rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.login({ email: 'x@x.com', password: 'p' }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException if password does not match', async () => {
       mockPrismaService.user.findUnique.mockResolvedValue({ password: 'h' });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-      await expect(service.login({ email: 'x@x.com', password: 'p' }))
-        .rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.login({ email: 'x@x.com', password: 'p' }),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 });
